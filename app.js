@@ -9,14 +9,8 @@ if (process.env.NODE_ENV === 'production' && process.env.RAVEN_ENDPOINT) {
   Raven.config(process.env.RAVEN_ENDPOINT).install()
 }
 
-const TARGET_HOST = process.env.TARGET_HOST
 const TIMEOUT = process.env.TIMEOUT || 5000
 const PORT = process.env.PORT || 5000
-
-if (!TARGET_HOST) {
-  console.error('💥 Missing target host name, exiting.')
-  process.exit(1)
-}
 
 app.get('/', (req, res) => {
   res.send('GET /shoot?path=…&selector=… to take a screenshot')
@@ -32,7 +26,7 @@ app.get('/shoot', async (req, res) => {
     return res.end()
   }
 
-  const target = url.resolve(TARGET_HOST, path)
+  const target = path
 
   try {
     const screenshot = await takeScreenshot(target, selector, padding)
